@@ -9,6 +9,7 @@ class RequestState(BaseModel):
     system_prompt: str
     messages: List[str]
     allow_search: bool
+    rolestrictness: int  # New Field for role strictness
 
 # Step 2. Setup AI Agent from FrontEnd Request
 from fastapi import FastAPI
@@ -36,9 +37,12 @@ def chat_endpoint(request: RequestState):
     allow_search = request.allow_search
     system_prompt = request.system_prompt
     provider = request.model_provider
+    role_strictness = request.rolestrictness
     
-    reponse = get_response_from_ai_agent(llm_id, query, allow_search, system_prompt, provider)
+    reponse = get_response_from_ai_agent(llm_id, query, allow_search, system_prompt, provider, role_strictness)
     return reponse
+
+
 
 
 

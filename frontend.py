@@ -7,15 +7,17 @@ st.title("AI Chatbot Agents")
 st.write("Create and Interact with AI Agents!")
 
 system_prompt=st.text_area("Define Your AI Agent: ", height = 70, placeholder="Type your system prompt here...")
+# Create a slider with min=0, max=100, step=5
+role_threshold = st.slider("Role Strictness:", min_value=0, max_value=100, step=5)
+
 
 MODEL_NAMES_GROQ = ["llama-3.3-70b-versatile", "mixtral-8x7b-32768"]
 MODEL_NAMES_OPENAI = ["gpt-4o-mini"]
 
 provider=st.radio("Select Provider:", ("Groq", "OpenAI"))
-
 if provider == "Groq":
     selected_model = st.selectbox("Select Groq Mosdel:", MODEL_NAMES_GROQ)
-elif provider == "OPENAI":
+elif provider == "OpenAI":
     selected_model = st.selectbox("Select OpenAI Mosdel:", MODEL_NAMES_OPENAI)
 
 allow_web_search = st.checkbox("Allow Web Search")
@@ -34,7 +36,8 @@ if st.button("Ask Agent!"):
             "model_provider": provider,
             "system_prompt": system_prompt,
             "messages": [user_query],
-            "allow_search": allow_web_search
+            "allow_search": allow_web_search,
+            "rolestrictness": role_threshold
         }
 
         response = requests.post(API_URL, json=payload)
